@@ -1,6 +1,6 @@
-from app.models.database import metadata
-from sqlalchemy import Table, Column, ForeignKey
+from sqlalchemy import Column, ForeignKey, Table
 
+from app.models.database import metadata
 
 note_boards = Table(
     "note_boards",

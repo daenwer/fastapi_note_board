@@ -1,10 +1,11 @@
 from typing import List
 
-from app.utils import boards as board_utils
-from app.utils import notes as note_utils
-from app.utils import note_boards as note_board_utils
-from app.schemas import boards as board_schemas
 from fastapi import APIRouter, HTTPException
+
+from app.schemas import boards as board_schemas
+from app.utils import boards as board_utils
+from app.utils import note_boards as note_board_utils
+from app.utils import notes as note_utils
 
 router = APIRouter()
 
@@ -36,18 +37,14 @@ async def delete_board(board_id: int):
     await board_utils.delete_board(board_id)
 
 
-@router.put(
-    "/boards/{board_id}/{new_name}", status_code=204
-)
+@router.put("/boards/{board_id}/{new_name}", status_code=204)
 async def update_note_name(board_id: int, new_name: str):
     if not await board_utils.get_board(board_id):
         raise HTTPException(status_code=400, detail="Note not created")
     await board_utils.update_name(board_id, {"name": new_name})
 
 
-@router.put(
-    "/boards_add_note/{board_id}/{note_id}", status_code=204
-)
+@router.put("/boards_add_note/{board_id}/{note_id}", status_code=204)
 async def add_note(board_id: int, note_id: int):
     if not await board_utils.get_board(board_id):
         raise HTTPException(status_code=400, detail="Board not created")
@@ -58,9 +55,7 @@ async def add_note(board_id: int, note_id: int):
     await note_board_utils.add_note(board_id, note_id)
 
 
-@router.put(
-    "/boards_remove_note/{board_id}/{note_id}", status_code=204
-)
+@router.put("/boards_remove_note/{board_id}/{note_id}", status_code=204)
 async def remove_note(board_id: int, note_id: int):
     if not await note_board_utils.get_note_board(board_id, note_id):
         raise HTTPException(

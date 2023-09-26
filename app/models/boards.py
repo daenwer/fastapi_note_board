@@ -1,6 +1,6 @@
-from app.models.database import metadata
-from sqlalchemy import Table, Column, Integer, Text, DateTime, func
+from sqlalchemy import Column, DateTime, Integer, Table, Text, func
 
+from app.models.database import metadata
 
 boards = Table(
     "boards",
@@ -8,11 +8,16 @@ boards = Table(
     Column("id", Integer, primary_key=True),
     Column("name", Text, nullable=False),
     Column(
-        "created_at", DateTime, server_default=func.current_timestamp(),
-        nullable=False
+        "created_at",
+        DateTime,
+        server_default=func.current_timestamp(),
+        nullable=False,
     ),
     Column(
-        "updated_at", DateTime, server_default=func.current_timestamp(),
-        onupdate=func.current_timestamp(), nullable=False
-    )
+        "updated_at",
+        DateTime,
+        server_default=func.current_timestamp(),
+        onupdate=func.current_timestamp(),
+        nullable=False,
+    ),
 )

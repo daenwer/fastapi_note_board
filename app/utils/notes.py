@@ -10,12 +10,17 @@ from app.schemas import notes as note_schemas
 
 
 async def get_notes(
-        skip: int = 0, limit: int = 100, note_ids: Optional[List[int]] = None
+    skip: int = 0, limit: int = 100, note_ids: Optional[List[int]] = None
 ):
     if note_ids is None:
         query = notes.select().offset(skip).limit(limit)
     else:
-        query = notes.select().offset(skip).limit(limit).where(notes.c.id.in_(note_ids))
+        query = (
+            notes.select()
+            .offset(skip)
+            .limit(limit)
+            .where(notes.c.id.in_(note_ids))
+        )
     result = await database.fetch_all(query)
     return result
 
@@ -28,11 +33,7 @@ async def get_note(note_id: int):
 async def update_note(notes_id: int, new_data: dict, updated=False):
     if updated:
         new_data["updated_at"] = func.current_timestamp()
-    query = (
-        update(notes)
-        .where(notes.c.id == notes_id)
-        .values(**new_data)
-    )
+    query = update(notes).where(notes.c.id == notes_id).values(**new_data)
     await database.execute(query)
 
 

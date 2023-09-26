@@ -1,8 +1,8 @@
 import uvicorn
 from fastapi import FastAPI
-from app.models.database import database, engine, metadata
 
-from app.routers import notes, boards
+from app.models.database import database, engine, metadata
+from app.routers import boards, notes
 
 metadata.create_all(bind=engine)
 

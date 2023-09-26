@@ -1,8 +1,8 @@
 from sqlalchemy import func
 from sqlalchemy.sql import update
 
-from app.models.database import database
 from app.models.boards import boards
+from app.models.database import database
 from app.models.note_boards import note_boards
 from app.schemas import boards as board_schemas
 
@@ -46,11 +46,11 @@ async def delete_board(board_id: int):
 
 
 async def update_name(board_id: int, new_data: dict):
-    query = (update(boards).where(boards.c.id == board_id).values(**new_data))
+    query = update(boards).where(boards.c.id == board_id).values(**new_data)
     await database.execute(query)
 
 
 async def update_updated_at(board_id: int):
     new_data = {"updated_at": func.current_timestamp()}
-    query = (update(boards).where(boards.c.id == board_id).values(**new_data))
+    query = update(boards).where(boards.c.id == board_id).values(**new_data)
     await database.execute(query)

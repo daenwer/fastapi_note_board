@@ -1,7 +1,7 @@
-import databases
 from os import environ
-from sqlalchemy import create_engine, MetaData
 
+import databases
+from sqlalchemy import MetaData, create_engine
 
 DB_USER = environ.get("DB_USER", "user")
 DB_PASS = environ.get("DB_PASS", "password")

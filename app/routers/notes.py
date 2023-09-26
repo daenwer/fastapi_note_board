@@ -1,9 +1,10 @@
 from typing import List
 
-from app.utils import notes as note_utils
-from app.utils import boards as board_utils
-from app.schemas import notes as note_schemas
 from fastapi import APIRouter, HTTPException
+
+from app.schemas import notes as note_schemas
+from app.utils import boards as board_utils
+from app.utils import notes as note_utils
 
 router = APIRouter()
 
@@ -53,7 +54,5 @@ async def delete_note(note_id: int):
 async def update_note(note_id: int, content: str):
     if not await note_utils.get_note(note_id):
         raise HTTPException(status_code=400, detail="Note not created")
-    await note_utils.update_note(
-        note_id, {"content": content}, True
-    )
+    await note_utils.update_note(note_id, {"content": content}, True)
     return await note_utils.get_note(note_id)
