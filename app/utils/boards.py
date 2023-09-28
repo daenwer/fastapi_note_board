@@ -41,8 +41,9 @@ async def delete_board(board_id: int):
         note_boards.c.board_id == board_id
     )
     query_board = boards.delete().where(boards.c.id == board_id)
-    await database.execute(query_note_boards)
-    await database.execute(query_board)
+    async with database.transaction():
+        await database.execute(query_note_boards)
+        await database.execute(query_board)
 
 
 async def update_name(board_id: int, new_data: dict):

@@ -48,5 +48,6 @@ async def delete_note(note_id: int):
         note_boards.c.note_id == note_id
     )
     query_note = notes.delete().where(notes.c.id == note_id)
-    await database.execute(query_note_boards)
-    await database.execute(query_note)
+    async with database.transaction():
+        await database.execute(query_note_boards)
+        await database.execute(query_note)
