@@ -6,9 +6,11 @@ from app.models.boards import boards
 from app.models.database import database
 from app.models.note_boards import note_boards
 from app.schemas import boards as board_schemas
+from app.utils import base
 
 
 async def get_boards(skip: int = 0, limit: int = 100):
+    base.check_skip_limit(skip, limit)
     query = boards.select().offset(skip).limit(limit)
     return await database.fetch_all(query)
 
@@ -17,7 +19,7 @@ async def get_board(board_id: int, board_notes=False):
     query = boards.select().where(boards.c.id == board_id)
     db_board = await database.fetch_one(query)
     if not db_board:
-        raise HTTPException(status_code=404, detail="Board not created")
+        raise HTTPException(status_code=400, detail="Board not created")
     if not board_notes:
         return db_board
     db_board = dict(db_board)
@@ -40,7 +42,10 @@ async def create_board(board: board_schemas.BaseBoard):
 
 
 async def is_board_exist(board_id: int):
-    await get_board(board_id)
+    db_board = await get_board(board_id)
+    if not db_board:
+        raise HTTPException(status_code=404, detail="Board not created")
+    return db_board
 
 
 async def delete_board(board_id: int):
