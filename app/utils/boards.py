@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqlalchemy import func
 from sqlalchemy.sql import update
 
@@ -15,7 +16,9 @@ async def get_boards(skip: int = 0, limit: int = 100):
 async def get_board(board_id: int, board_notes=False):
     query = boards.select().where(boards.c.id == board_id)
     db_board = await database.fetch_one(query)
-    if not db_board or not board_notes:
+    if not db_board:
+        raise HTTPException(status_code=404, detail="Board not created")
+    if not board_notes:
         return db_board
     db_board = dict(db_board)
     board_notes_query = note_boards.select().where(
@@ -37,6 +40,8 @@ async def create_board(board: board_schemas.BaseBoard):
 
 
 async def delete_board(board_id: int):
+    if not await get_board(board_id):
+        raise HTTPException(status_code=404, detail="Note not created")
     query_note_boards = note_boards.delete().where(
         note_boards.c.board_id == board_id
     )
@@ -47,6 +52,8 @@ async def delete_board(board_id: int):
 
 
 async def update_name(board_id: int, new_data: dict):
+    if not await get_board(board_id):
+        raise HTTPException(status_code=404, detail="Note not created")
     query = update(boards).where(boards.c.id == board_id).values(**new_data)
     await database.execute(query)
 
