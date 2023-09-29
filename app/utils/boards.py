@@ -19,7 +19,7 @@ async def get_board(board_id: int, board_notes=False):
     query = boards.select().where(boards.c.id == board_id)
     db_board = await database.fetch_one(query)
     if not db_board:
-        raise HTTPException(status_code=400, detail="Board not created")
+        raise HTTPException(status_code=404, detail="Board not created")
     if not board_notes:
         return db_board
     db_board = dict(db_board)
@@ -42,10 +42,7 @@ async def create_board(board: board_schemas.BaseBoard):
 
 
 async def is_board_exist(board_id: int):
-    db_board = await get_board(board_id)
-    if not db_board:
-        raise HTTPException(status_code=404, detail="Board not created")
-    return db_board
+    return await get_board(board_id)
 
 
 async def delete_board(board_id: int):
