@@ -39,9 +39,12 @@ async def create_board(board: board_schemas.BaseBoard):
     return {"id": note_id}
 
 
+async def is_board_exist(board_id: int):
+    await get_board(board_id)
+
+
 async def delete_board(board_id: int):
-    if not await get_board(board_id):
-        raise HTTPException(status_code=404, detail="Note not created")
+    await is_board_exist(board_id)
     query_note_boards = note_boards.delete().where(
         note_boards.c.board_id == board_id
     )
@@ -52,8 +55,7 @@ async def delete_board(board_id: int):
 
 
 async def update_name(board_id: int, new_data: dict):
-    if not await get_board(board_id):
-        raise HTTPException(status_code=404, detail="Note not created")
+    await is_board_exist(board_id)
     query = update(boards).where(boards.c.id == board_id).values(**new_data)
     await database.execute(query)
 
