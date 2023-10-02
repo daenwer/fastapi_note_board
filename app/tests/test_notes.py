@@ -18,7 +18,7 @@ def test_create_note(temp_db):
 
     assert response.status_code == 201
     assert item_from_db
-    assert dict(item_from_db).get("content") == request_data["content"]
+    assert dict(item_from_db).get("content") == request_data.get("content")
 
 
 def test_create_note_failed(temp_db):
