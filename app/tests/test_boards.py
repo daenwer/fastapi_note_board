@@ -7,7 +7,7 @@ from fastapi.testclient import TestClient
 
 from app.main import app
 from app.models.boards import boards
-from app.tests.conftests import set_up_and_teardown, temp_db, clear_db
+from app.tests.conftests import clear_db, set_up_and_teardown, temp_db
 
 
 def test_create_board(temp_db):
@@ -41,8 +41,8 @@ def test_get_boards(temp_db, set_up_and_teardown):
     response_boards = response.json()
     assert response.status_code == 200
     assert len(response_boards) == excepted_boards_count
-#
-#
+
+
 def test_get_boards_by_id(temp_db, set_up_and_teardown):
     with SessionLocal() as db:
         single_board = db.query(boards).first()

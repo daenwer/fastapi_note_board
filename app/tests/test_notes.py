@@ -7,6 +7,7 @@ from app.tests.conftests import clear_db, set_up_and_teardown, temp_db
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+
 def test_create_note(temp_db):
     request_data = {"content": "This is the first test note!"}
 
