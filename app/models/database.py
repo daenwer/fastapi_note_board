@@ -1,3 +1,4 @@
+import json
 from os import environ
 
 import databases
@@ -6,7 +7,11 @@ from sqlalchemy import MetaData, create_engine
 DB_USER = environ.get("DB_USER", "user")
 DB_PASS = environ.get("DB_PASS", "password")
 DB_HOST = environ.get("DB_HOST", "localhost")
-DB_NAME = environ.get("DB_NAME", "name")
+
+if json.loads(environ.get("TESTING").lower()):
+    DB_NAME = environ.get("DB_TEST_NAME", "testing_name")
+else:
+    DB_NAME = environ.get("DB_NAME", "name")
 
 
 SQLALCHEMY_DATABASE_URL = (
